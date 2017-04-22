@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    public GameObject mCell;
+    public GameObject mHex;
+
+    private int index = 0;
+
+    public List<Vector3> allHexs = new List<Vector3>();
 
     void Awake()
     {
         DrawNormals();
-    }
-
-    void Update()
-    {
-        
     }
 
     void OnDrawGizmosSelected()
@@ -38,17 +37,53 @@ public class Planet : MonoBehaviour
     {
         Mesh mesh = GetComponent<MeshFilter>().sharedMesh;
 
-        for (int i = 0; i < mesh.vertices.Length; i++)
+        List<Vector3> allNormals = new List<Vector3>();
+        allNormals.AddRange(mesh.normals);
+
+        for (int i = 0; i < allNormals.Count; i++)
         {
             // Position, rotation
-            Vector3 normal = transform.TransformDirection(mesh.normals[i]);
-            Vector3 vertex = transform.TransformPoint(mesh.vertices[i]);
+            Vector3 normal = transform.TransformDirection(allNormals[i]);
+            List<Vector3> relevantNormals = new List<Vector3>();
 
-            // Create object
-            GameObject newObject = Instantiate(mCell, vertex, Quaternion.identity);
+            // Get all relevant normals
+            foreach (Vector3 meshNormal in allNormals)
+            {
+                if (normal == transform.TransformDirection(meshNormal))
+                {
+                    relevantNormals.Add(meshNormal);
+                }
+            }
+
+            float distance = 0.0f;
+            Vector3 furthestPoint = Vector3.zero;
+
+            // Get furthest normal
+            foreach (Vector3 otherNormal in relevantNormals)
+            {
+                float tempDistance = Vector3.Distance(normal, otherNormal);
+
+                if (tempDistance > distance)
+                {
+                    distance = tempDistance;
+                    furthestPoint = otherNormal;
+                }
+            }
+
+            Vector3 targetPosition = Vector3.Lerp(normal, furthestPoint, 0.5f);
+
+            GameObject newObject = Instantiate(mHex);
+
             newObject.transform.up = normal;
+            newObject.transform.position = targetPosition;
 
-            Debug.DrawRay(vertex, normal * 1.0f, Color.red);
+            allHexs.Add(targetPosition);
+
+            // Remove relevant
+            foreach (Vector3 otherNormal in relevantNormals)
+            {
+                allNormals.Remove(otherNormal);
+            }
         }
     }
 
