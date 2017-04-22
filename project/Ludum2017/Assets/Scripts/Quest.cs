@@ -9,7 +9,6 @@ public class Quest {
     public enum QuestHexType { RIVER, ROAD, ANIMAL, MOUNTAIN, BUILDING }
     public enum QuestType { SOLO, GROUP}
 
-    public string title;
     public int id;
     public QuestHexType hexType;
     public QuestType playerType;

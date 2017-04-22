@@ -15,16 +15,20 @@ public class NetworkedPlayer : Photon.PunBehaviour
     public Quest myGroupQuest;
     public int myPoints;
 
-    void Awake()
+    void Start()
     {
         if (photonView.isMine)
         {
             NetworkedPlayer.LocalPlayerInstance = this.gameObject;
+            UpdateQuest();
         }
     }
 
     void Update()
     {
+
+        CheckSoloComplete(); //is quest complete?
+        CheckGroupComplete(); //is quest complete?
 
         if (photonView.isMine) //only allow input for my network view
         {
@@ -65,13 +69,34 @@ public class NetworkedPlayer : Photon.PunBehaviour
         hex.Fill(hexType);
     }
 
+    void UpdateQuest()
+    {
+        mySoloQuest = QuestManager.currentSoloQuest;
+        myGroupQuest = QuestManager.currentGroupQuest;
+    }
+
+    public void CheckSoloComplete()
+    {
+        //TODO: if quest completed
+        photonView.RPC("CompleteSoloQuest", PhotonTargets.All, mySoloQuest.pointReward, mySoloQuest.id); //call network update player
+        QuestManager.NextSoloQuest();
+        UpdateQuest();
+    }
+
+    public void CheckGroupComplete()
+    {
+        //TODO: if quest completed
+        photonView.RPC("CompleteGroupQuest", PhotonTargets.All, myGroupQuest.pointReward, myGroupQuest.id); //call network update player
+        QuestManager.NextGroupQuest();
+        UpdateQuest();
+    }
+
     [PunRPC]
     void CompleteSoloQuest(int reward, int id)
     {
         if (photonView.isMine)
         {
             myPoints += reward; //add points to player
-            mySoloQuest.id = id; //update quest
         }
     }
 
@@ -79,7 +104,6 @@ public class NetworkedPlayer : Photon.PunBehaviour
     void CompleteGroupQuest(int reward, int id)
     {
         myPoints += reward; //add points to player
-        myGroupQuest.id = id; //update quest
 
     }
 }

@@ -45,8 +45,6 @@ public class NetworkManager : Photon.MonoBehaviour
             PhotonNetwork.Instantiate("MyPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         }
 
-        print(NetworkedPlayer.LocalPlayerInstance.GetPhotonView().viewID);
-
 
     }
 
