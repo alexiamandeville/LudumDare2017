@@ -36,7 +36,7 @@ public class NetworkedPlayer : Photon.MonoBehaviour
         if (!Physics.Raycast(ray, out hit))
             return;
 
-        // Was it a Hex?
+        // Did we hit the world
         if (hit.collider.gameObject.tag != "Hex")
             return;
 

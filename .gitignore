@@ -34,3 +34,4 @@ sysinfo.txt
 *.unitypackage
 project/Ludum2017/Assets/Scenes/local.unity
 *.meta
+project/Ludum2017/Library/assetDatabase3
