@@ -22,8 +22,9 @@ public class NetworkManager : Photon.MonoBehaviour
 
     void OnJoinedLobby()
     {
-        print("JoinedLobby");
+        
         RoomOptions roomOptions = new RoomOptions() { };
+        roomOptions.MaxPlayers = 4;
         PhotonNetwork.JoinOrCreateRoom(_room, roomOptions, TypedLobby.Default);
     }
 
@@ -44,6 +45,9 @@ public class NetworkManager : Photon.MonoBehaviour
             PhotonNetwork.Instantiate("MyPlayer", new Vector3(0, 0, 0), Quaternion.identity, 0);
         }
 
+        print(NetworkedPlayer.LocalPlayerInstance.GetPhotonView().viewID);
+
+
     }
 
     void OnPhotonPlayerConnected()
@@ -58,6 +62,5 @@ public class NetworkManager : Photon.MonoBehaviour
 
         }
     }
-
 
 }
