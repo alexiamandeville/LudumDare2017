@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour {
 
 	public void ResetGame ()
 	{
-		SceneManager.LoadScene ("MenuScene");
+		SceneManager.LoadScene ("main");
 	}
 
 }

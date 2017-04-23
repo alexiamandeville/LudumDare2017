@@ -3,29 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour 
+public class UIManager : MonoBehaviour
 {
-	public static UIManager Instance;
+    public static UIManager Instance;
     public Text soloObj;
     public Text[] playerAssets;
 
-	void Awake()
-	{
-		Instance = this;
-	}
+    void Awake()
+    {
+        Instance = this;
+    }
 
-	public GameObject currentWindow;
+    public GameObject currentWindow;
 
-	public void SetNewWindow(GameObject newWindow)
-	{
-		if (currentWindow != null) 
-		{
-			currentWindow.SetActive (false);
-		}
+    public void SetNewWindow(GameObject newWindow)
+    {
+        if (currentWindow != null)
+        {
+            currentWindow.SetActive(false);
+        }
 
-		currentWindow = newWindow;
-		currentWindow.SetActive (true);
-	}
+        currentWindow = newWindow;
+
+        if (currentWindow != null)
+        {
+            currentWindow.SetActive(true);
+        }
+    }
 
     void Update()
     {
