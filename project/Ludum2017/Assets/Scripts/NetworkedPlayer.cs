@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
     public static GameObject LocalPlayerInstance;
 
     public HexType hexType;
+    public static string[] myHexes = new string[5];
     public int playerId;
     public Quest mySoloQuest;
     public Quest myGroupQuest;
@@ -19,7 +21,17 @@ public class NetworkedPlayer : Photon.PunBehaviour
     {
         if (photonView.isMine)
         {
-            NetworkedPlayer.LocalPlayerInstance = this.gameObject;
+            InitAssets(); //initialize the assets/tokens the player has
+            NetworkedPlayer.LocalPlayerInstance = this.gameObject; //may need for later
+        }
+
+    }
+
+    void InitAssets() //add assets to player
+    {
+        for (int i = 0; i < myHexes.Length; i++)
+        {
+            myHexes[i] = ((HexType)UnityEngine.Random.Range(1, 5)).ToString();
         }
     }
 
@@ -28,12 +40,11 @@ public class NetworkedPlayer : Photon.PunBehaviour
         if (Input.GetMouseButtonDown(0)) //mouse for desktop
             CreateRay(Input.mousePosition);
 
-        if (photonView.isMine) //only allow input for my network view
-        {
+
 #if UNITY_EDITOR
             if (Input.GetMouseButtonDown(0)) //mouse for desktop
                 CreateRay(Input.mousePosition);
-        }
+        
 #endif
 #if UNITY_ANDROID || UNITY_IPHONE
         foreach (Touch touch in Input.touches) //touch with phone
@@ -74,6 +85,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
         {
             myPoints += reward; //add points to player
             mySoloQuest.id = id; //update quest
+            InitAssets(); //update player pieces
         }
     }
 

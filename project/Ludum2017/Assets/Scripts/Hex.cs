@@ -11,7 +11,8 @@ public enum HexType
     Road,
     City,
     River,
-    Mountain
+    Mountain, 
+    Forest
 }
 
 public class Hex : MonoBehaviour
@@ -67,9 +68,11 @@ public class Hex : MonoBehaviour
                 newMesh = tileMeshes[1];
                 break;
         }
-
-        if(newMesh != null)
+        print(newMesh);
+        if (newMesh != null)
+        {
             CreateMesh(newMesh);
+        }
     }
 
     private void CreateMesh(GameObject newMesh)

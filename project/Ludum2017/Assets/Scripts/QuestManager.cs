@@ -32,8 +32,8 @@ public class QuestManager : MonoBehaviour {
 
         int randSolo = Random.Range(0, _soloQuests.Count);
         currentSoloQuest = _soloQuests[randSolo]; //set initial solo quest
-        int randGroup = Random.Range(0, _soloQuests.Count);
-        currentGroupQuest = _groupQuests[randGroup]; //set initial group quest
+        int randGroup = Random.Range(0, _groupQuests.Count);
+        currentGroupQuest = _groupQuests[0]; //set initial group quest
     }
 
     public void NextSoloQuest()

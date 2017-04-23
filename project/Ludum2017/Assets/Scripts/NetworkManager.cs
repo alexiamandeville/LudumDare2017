@@ -9,9 +9,12 @@ public class NetworkManager : Photon.MonoBehaviour
     public Image[] playerAvatarSlot;
     public Text[] playerTextSlot;
 
+    public Button joinButton;
+    public Text loading;
 
     void Start()
     {
+        joinButton.gameObject.SetActive(false);
         PhotonNetwork.ConnectUsingSettings("0.1");
     }
 
@@ -20,9 +23,14 @@ public class NetworkManager : Photon.MonoBehaviour
         PhotonNetwork.JoinLobby();
     }
 
+    void OnConnectedToMaster()
+    {
+        joinButton.gameObject.SetActive(true);
+        loading.gameObject.SetActive(false);
+    }
+
     void OnJoinedLobby()
     {
-        
         RoomOptions roomOptions = new RoomOptions() { };
         roomOptions.MaxPlayers = 4;
         PhotonNetwork.JoinOrCreateRoom(_room, roomOptions, TypedLobby.Default);
@@ -33,6 +41,8 @@ public class NetworkManager : Photon.MonoBehaviour
     /// </summary>
     void OnJoinedRoom()
     {
+
+
         //limit players to 4
         if (PhotonNetwork.playerList.Length <= 4)
         {
