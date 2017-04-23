@@ -38,7 +38,6 @@ public class QuestManager : MonoBehaviour {
 
     public void NextSoloQuest()
     {
-        print(_soloQuests.Count);
         int rand = Random.Range(0, _soloQuests.Count-1);
         currentSoloQuest = _soloQuests[rand]; //set new solo quest
     }

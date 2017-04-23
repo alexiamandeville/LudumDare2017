@@ -22,24 +22,27 @@ public class NetworkedPlayer : Photon.PunBehaviour
 
     void Update()
     {
-
-        CheckSoloComplete(); //is quest complete?
-        CheckGroupComplete(); //is quest complete?
-
-        if (photonView.isMine) //only allow input for my network view
+        if (true)
+        {
+            CheckSoloComplete(); //is quest complete?
+            //CheckGroupComplete(); //is quest complete?
+        }
+            if (photonView.isMine) //only allow input for my network view
         {
 #if UNITY_EDITOR
             if (Input.GetMouseButtonDown(0)) //mouse for desktop
                 CreateRay(Input.mousePosition);
-        }
 #endif
 #if UNITY_ANDROID || UNITY_IPHONE
         foreach (Touch touch in Input.touches) //touch with phone
         {
             Touch touch0 = Input.GetTouch(0);
             Vector3 myTouch = new Vector3(touch0.position.x, touch0.position.y, 0);
-            CreateRay(myTouch);
+
+                CreateRay(myTouch);
         }
+        }
+
 #endif
     }
 
@@ -74,6 +77,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
     public void CheckSoloComplete()
     {
         //TODO: if quest completed
+        print(mySoloQuest.pointReward);
         photonView.RPC("CompleteSoloQuest", PhotonTargets.All, mySoloQuest.pointReward, mySoloQuest.id); //call network update player
         QuestManager.Instance.NextSoloQuest();
         UpdateQuest();

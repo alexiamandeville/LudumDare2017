@@ -6,7 +6,7 @@ using UnityEngine;
 public class Quest {
 
     public enum QuestProgress {IN_PROGRESS, DONE}
-    public enum QuestHexType { RIVER, ROAD, ANIMAL, MOUNTAIN, BUILDING }
+    public enum QuestHexType { RIVER, ROAD, ANIMAL, MOUNTAIN, BUILDING, FOREST }
     public enum QuestType { SOLO, GROUP}
 
     public int id;
