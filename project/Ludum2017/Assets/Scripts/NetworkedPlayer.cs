@@ -64,8 +64,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
         Hex hex = hit.collider.gameObject.GetComponent<Hex>();
 
         // If we fill successfully, remove value from player for this round
-        if (hex.isCenter)
-            hex.Fill(hexType);
+        hex.Fill(hexType);
     }
 
     [PunRPC]

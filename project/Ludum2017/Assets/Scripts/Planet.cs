@@ -8,7 +8,7 @@ public class Planet : MonoBehaviour
 
     public GameObject mHex;
 
-    void Awake()
+    void Start()
     {
         Instance = this;
 

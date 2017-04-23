@@ -16,13 +16,10 @@ public enum HexType
 
 public class Hex : MonoBehaviour
 {
-    public bool isCenter = false;
     public HexType currentType = HexType.None;
     public List<GameObject> tileMeshes;
 
     public static List<Hex> allHexs = new List<Hex>();
-
-    private List<Hex> borderHexs = new List<Hex>();
 
     void Awake()
     {
@@ -49,26 +46,12 @@ public class Hex : MonoBehaviour
         currentType = playerType;
         SetTileMesh();
 
-        foreach(Hex hex in borderHexs)
-        {
-            if (hex.GetInstanceID() != GetInstanceID())
-                hex.gameObject.SetActive(false);
-        }
+        GetComponent<MeshRenderer>().enabled = false;
     }
 
     public void Clear()
     {
         currentType = HexType.None;
-    }
-
-    private void GetBorder()
-    {
-        List<Hex> orderedHex = allHexs.OrderBy(x => Vector3.Distance(this.transform.position, x.transform.position)).ToList();
-
-        for(int i = 0; i < 7; i++)
-        {
-            borderHexs.Add(orderedHex[i]);
-        }
     }
 
     private void SetTileMesh()
