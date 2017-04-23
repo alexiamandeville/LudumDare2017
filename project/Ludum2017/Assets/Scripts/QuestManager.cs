@@ -5,44 +5,48 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour {
 
+    private static QuestManager _instance;
+    public static QuestManager Instance { get { return _instance; } }
+
     public List<Quest> questDict;
-    private List<Quest> _soloQuests;
-    private List<Quest> _groupQuests;
-    public static Quest currentSoloQuest;
-    public static Quest currentGroupQuest;
-     
-	// Use this for initialization
-	void Awake () {
+    public List<Quest> _soloQuests;
+    public List<Quest> _groupQuests;
+    public Quest currentSoloQuest;
+    public Quest currentGroupQuest;
+
+    // Use this for initialization
+    void Awake () {
+
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
 
         //separate quests by type
-        List<Quest> _soloQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.SOLO).ToList();
-        List<Quest> _groupQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.GROUP).ToList();
+        _soloQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.SOLO).ToList();
+        _groupQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.GROUP).ToList();
 
-        int rand = Random.Range(0, questDict.Count);
-        currentSoloQuest = questDict[rand]; //set initial solo quest
-        currentGroupQuest = questDict[rand]; //set initial group quest
+        int randSolo = Random.Range(0, _soloQuests.Count);
+        currentSoloQuest = _soloQuests[randSolo]; //set initial solo quest
+        int randGroup = Random.Range(0, _soloQuests.Count);
+        currentGroupQuest = _groupQuests[randGroup]; //set initial group quest
     }
-	
-	// Update is called once per frame
-	void Update () {
 
-        //group quest
-        if (currentGroupQuest.progress.ToString() == "COMPLETE") //update current quest once player has completed one
-        {
-            NetworkedPlayer.LocalPlayerInstance.GetPhotonView().RPC("CompleteGroupQuest", PhotonTargets.All, currentGroupQuest.pointReward, currentGroupQuest.id); //call network update player
-            int rand = Random.Range(0, questDict.Count);
-            currentGroupQuest = questDict[rand]; //set updated quest
+    public void NextSoloQuest()
+    {
+        int rand = Random.Range(0, _soloQuests.Count-1);
+        currentSoloQuest = _soloQuests[rand]; //set new solo quest
+    }
 
-        }
+    public void NextGroupQuest()
+    {
+        int rand = Random.Range(0, _groupQuests.Count-1);
+        currentGroupQuest = _groupQuests[rand]; //set new group quest
+    }
 
-        //solo quest
-        if (currentSoloQuest.progress.ToString() == "COMPLETE") //update current quest once player has completed one
-        {
-            NetworkedPlayer.LocalPlayerInstance.GetPhotonView().RPC("CompleteSoloQuest", PhotonTargets.All, currentSoloQuest.pointReward, currentSoloQuest.id); //call network update player
-            int rand = Random.Range(0, questDict.Count);
-            currentSoloQuest = questDict[rand]; //set updated quest
-
-        }
-	}
 
 }
