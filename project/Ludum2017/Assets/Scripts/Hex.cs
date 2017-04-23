@@ -12,7 +12,8 @@ public enum HexType
     City,
     River,
     Mountain, 
-    Forest
+    Forest,
+    Farm
 }
 
 public class Hex : MonoBehaviour
@@ -67,8 +68,11 @@ public class Hex : MonoBehaviour
             case HexType.Mountain:
                 newMesh = tileMeshes[1];
                 break;
+            case HexType.Farm:
+                newMesh = tileMeshes[2];
+                break;
         }
-        print(newMesh);
+
         if (newMesh != null)
         {
             CreateMesh(newMesh);
