@@ -5,18 +5,30 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour {
 
+    private static QuestManager _instance;
+    public static QuestManager Instance { get { return _instance; } }
+
     public List<Quest> questDict;
-    private static List<Quest> _soloQuests = new List<Quest>();
-    private static List<Quest> _groupQuests = new List<Quest>();
-    public static Quest currentSoloQuest;
-    public static Quest currentGroupQuest;
+    public List<Quest> _soloQuests;
+    public List<Quest> _groupQuests;
+    public Quest currentSoloQuest;
+    public Quest currentGroupQuest;
 
     // Use this for initialization
     void Awake () {
 
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            _instance = this;
+        }
+
         //separate quests by type
-        List<Quest> _soloQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.SOLO).ToList();
-        List<Quest> _groupQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.GROUP).ToList();
+        _soloQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.SOLO).ToList();
+        _groupQuests = questDict.FindAll(qFind => qFind.playerType == Quest.QuestType.GROUP).ToList();
 
         int randSolo = Random.Range(0, _soloQuests.Count);
         currentSoloQuest = _soloQuests[randSolo]; //set initial solo quest
@@ -24,17 +36,17 @@ public class QuestManager : MonoBehaviour {
         currentGroupQuest = _groupQuests[randGroup]; //set initial group quest
     }
 
-    public static void NextSoloQuest()
+    public void NextSoloQuest()
     {
         print(_soloQuests.Count);
         int rand = Random.Range(0, _soloQuests.Count-1);
-        currentSoloQuest = _soloQuests[rand]; //set initial solo quest
+        currentSoloQuest = _soloQuests[rand]; //set new solo quest
     }
 
-    public static void NextGroupQuest()
+    public void NextGroupQuest()
     {
         int rand = Random.Range(0, _groupQuests.Count-1);
-        currentGroupQuest = _groupQuests[rand]; //set initial group quest
+        currentGroupQuest = _groupQuests[rand]; //set new group quest
     }
 
 

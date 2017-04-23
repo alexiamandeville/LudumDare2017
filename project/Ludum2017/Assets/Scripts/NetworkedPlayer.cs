@@ -6,9 +6,6 @@ using UnityEngine.UI;
 public class NetworkedPlayer : Photon.PunBehaviour
 {
 
-    [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
-    public static GameObject LocalPlayerInstance;
-
     public HexType hexType;
     public int playerId;
     public Quest mySoloQuest;
@@ -19,7 +16,6 @@ public class NetworkedPlayer : Photon.PunBehaviour
     {
         if (photonView.isMine)
         {
-            NetworkedPlayer.LocalPlayerInstance = this.gameObject;
             UpdateQuest();
         }
     }
@@ -47,7 +43,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
 #endif
     }
 
-    //TO DO: need to make PunRPC
+    //TODO: need to make PunRPC
     private void CreateRay(Vector3 inputType)
     {
         // Create
@@ -71,15 +67,15 @@ public class NetworkedPlayer : Photon.PunBehaviour
 
     void UpdateQuest()
     {
-        mySoloQuest = QuestManager.currentSoloQuest;
-        myGroupQuest = QuestManager.currentGroupQuest;
+        mySoloQuest = QuestManager.Instance.currentSoloQuest;
+        myGroupQuest = QuestManager.Instance.currentGroupQuest;
     }
 
     public void CheckSoloComplete()
     {
         //TODO: if quest completed
         photonView.RPC("CompleteSoloQuest", PhotonTargets.All, mySoloQuest.pointReward, mySoloQuest.id); //call network update player
-        QuestManager.NextSoloQuest();
+        QuestManager.Instance.NextSoloQuest();
         UpdateQuest();
     }
 
@@ -87,7 +83,7 @@ public class NetworkedPlayer : Photon.PunBehaviour
     {
         //TODO: if quest completed
         photonView.RPC("CompleteGroupQuest", PhotonTargets.All, myGroupQuest.pointReward, myGroupQuest.id); //call network update player
-        QuestManager.NextGroupQuest();
+        QuestManager.Instance.NextGroupQuest();
         UpdateQuest();
     }
 
