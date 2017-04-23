@@ -12,7 +12,7 @@ public class Planet : MonoBehaviour
     {
         Instance = this;
 
-        DrawSpots();
+        // DrawSpots();
     }
 
     public void GetClosestVertex(Vector3 hitPoint)
@@ -52,32 +52,30 @@ public class Planet : MonoBehaviour
 
         for (int i = 0; i < mesh.vertices.Length; i++)
         {
-            if (CheckForHex(mesh.vertices[i]))
-                continue;
+            // mTest.transform.position = mesh.vertices[i] + transform.position;
 
-            GameObject newObject = Instantiate(mHex);
+            bool positionExists = false;
 
-            newObject.transform.up = transform.TransformDirection(mesh.vertices[i]);
-            newObject.transform.position = mesh.vertices[i] + transform.position;
-
-            newObject.transform.parent = transform;
-        }
-    }
-
-    private bool CheckForHex(Vector3 target)
-    {
-        RaycastHit hit;
-        Ray ray = new Ray(transform.position, target - transform.position);
-
-        if(Physics.Raycast(ray, out hit, 10.0f))
-        {
-            if(hit.collider.gameObject.tag == "Hex")
+            foreach(Hex hex in Hex.allHexs)
             {
-                return true;
+                if (Vector3.Distance(hex.transform.position, mesh.vertices[i] + transform.position) < 0.1f)
+                {
+                    positionExists = true;
+                    break;
+                }
+            }
+
+            if (!positionExists)
+            {
+                GameObject newObject = Instantiate(mHex);
+
+                newObject.transform.up = transform.TransformDirection(mesh.vertices[i]);
+                newObject.transform.position = mesh.vertices[i] + transform.position;
+
+                newObject.transform.parent = transform;
             }
         }
 
-        return false;
     }
 
     private List<Vector3> GetVertices()

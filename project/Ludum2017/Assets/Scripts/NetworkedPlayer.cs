@@ -25,6 +25,8 @@ public class NetworkedPlayer : Photon.PunBehaviour
 
     void Update()
     {
+        if (Input.GetMouseButtonDown(0)) //mouse for desktop
+            CreateRay(Input.mousePosition);
 
         if (photonView.isMine) //only allow input for my network view
         {
@@ -44,17 +46,17 @@ public class NetworkedPlayer : Photon.PunBehaviour
     }
 
     //TO DO: need to make PunRPC
-    private void CreateRay(Vector3 inputType)
+    private void CreateRay(Vector2 startPoint)
     {
         // Create
-        Ray ray = Camera.main.ScreenPointToRay(inputType);
+        Ray ray = Camera.main.ScreenPointToRay(startPoint);
         RaycastHit hit;
 
         // Did we hit something?
         if (!Physics.Raycast(ray, out hit))
             return;
 
-        // Was it a Hex?
+        // Did we hit the world
         if (hit.collider.gameObject.tag != "Hex")
             return;
 
@@ -62,7 +64,8 @@ public class NetworkedPlayer : Photon.PunBehaviour
         Hex hex = hit.collider.gameObject.GetComponent<Hex>();
 
         // If we fill successfully, remove value from player for this round
-        hex.Fill(hexType);
+        if (hex.isCenter)
+            hex.Fill(hexType);
     }
 
     [PunRPC]
